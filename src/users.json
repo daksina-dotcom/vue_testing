@@ -1,0 +1,52 @@
+[
+    {
+        "id": 1,
+        "name": "Daksina",
+        "age": 22,
+        "phone": "+91 98765-43210",
+        "email": "daksina@gmail.com",
+        "password": "pass_daksina",
+        "gender": "Male",
+        "occupation": "Software Engineer"
+    },
+    {
+        "id": 2,
+        "name": "Prakash",
+        "age": 13,
+        "phone": "+91 87654-32109",
+        "email": "prakash@gmail.com",
+        "password": "pass_prakash",
+        "gender": "Male",
+        "occupation": "Student"
+    },
+    {
+        "id": 3,
+        "name": "Sundar",
+        "age": 53,
+        "phone": "+91 90433-53576",
+        "email": "sundar@gmail.com",
+        "password": "pass_sundar",
+        "gender": "Male",
+        "occupation": "Business Analyst"
+    },
+    {
+        "id": 4,
+        "name": "Maha",
+        "age": 48,
+        "phone": "+91 99946-12221",
+        "email": "maha@gmail.com",
+        "password": "pass_maha",
+        "gender": "Female",
+        "occupation": "Teacher"
+    },
+    {
+        "id": 5,
+        "name": "Ananya",
+        "age": 23,
+        "phone": "+91 76543-21098",
+        "email": "ananya@gmail.com",
+        "password": "pass_ananya",
+        "gender": "Female",
+        "occupation": "Designer"
+    }
+]
