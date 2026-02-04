@@ -17,6 +17,7 @@ const dec = () => {
 const reset =() => {
     val.value = 0
 }
+
 </script>
 
 <template>

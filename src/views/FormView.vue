@@ -1,8 +1,12 @@
 <script setup>
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, computed, onMounted, watch } from "vue";
 import userData from "/src/users.json";
 const users = ref(userData);
+const focusFirst = ref(null);
 const newData = ref([]);
+const fullname = computed(() => {
+  return `${formData.firstname} ${formData.lastname}`;
+});
 const errors = reactive({
   name: "",
   age: "",
@@ -18,6 +22,8 @@ const formData = reactive({
   // password: "w@ll$treet",
   // gender: "Male",
   // occupation: "Software Developer"
+  firstname: "",
+  lastname: "",
   name: "",
   age: null,
   phone: "",
@@ -34,7 +40,11 @@ const validate = () => {
   errors.phone = "";
   errors.email = "";
   errors.password = "";
-  if (formData.name.length < 2) {
+  if (formData.firstname.length < 2) {
+    errors.name = "Name must be more than 2 characters or atleast 2 characters";
+    isValid = false;
+  }
+  if (formData.lastname.length < 2) {
     errors.name = "Name must be more than 2 characters or atleast 2 characters";
     isValid = false;
   }
@@ -62,7 +72,9 @@ const addData = () => {
   if (validate()) {
     const entry = {
       id: newData.value.length + 1,
-      name: formData.name,
+      firstname: formData.firstname,
+      lastname: formData.lastname,
+      name: fullname.value,
       age: formData.age,
       phone: formData.phone,
       email: formData.email,
@@ -74,26 +86,38 @@ const addData = () => {
   }
 };
 
-const jsonString = computed(() => {
-  return JSON.stringify(newData.value, null, 2);
+watch(
+  () => formData.firstname,
+  (newVal) => {
+    if (newVal.length >= 2) {
+      errors.name = "";
+    }
+  },
+);
+
+onMounted(() => {
+  focusFirst.value.focus();
 });
+// const jsonString = computed(() => {
+//   return JSON.stringify(newData.value, null, 2);
+// });
 
 const resetting = () => {
-  ((formData.name = ""),
-    (formData.age = null),
-    (formData.phone = ""),
-    (formData.email = ""),
-    (formData.password = ""),
-    (formData.gender = ""),
-    (formData.occupation = ""));
-  ((errors.name = ""),
-    (errors.age = ""),
-    (errors.phone = ""),
-    (errors.email = ""),
-    (errors.password = ""));
+  formData.firstname = "";
+  formData.lastname = "";
+  formData.name = "";
+  formData.age = null;
+  formData.phone = "";
+  formData.email = "";
+  formData.password = "";
+  formData.gender = "";
+  formData.occupation = "";
+  errors.name = "";
+  errors.age = "";
+  errors.phone = "";
+  errors.email = "";
+  errors.password = "";
 };
-
-      
 </script>
 
 <template>
@@ -101,10 +125,29 @@ const resetting = () => {
     <div class="form">
       <h1>User Details Form</h1>
       <div class="form-group">
-        <label>Name</label>
-        <input v-model="formData.name" type="text" placeholder="Diwakar" />
+        <label>First Name</label>
+        <input
+          ref="focusFirst"
+          v-model="formData.firstname"
+          type="text"
+          placeholder="Diwakar"
+        />
         <span class="error-text" v-if="errors.name">{{ errors.name }}</span>
         <!-- <p>Current value: {{ formData.name }}</p> -->
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input
+          v-model="formData.lastname"
+          type="text"
+          placeholder="Rajalingam"
+        />
+        <span class="error-text" v-if="errors.name">{{ errors.name }}</span>
+        <!-- <p>Current value: {{ formData.name }}</p> -->
+      </div>
+      <div class="form-group">
+        <label>Full Name</label>
+        <p>{{ fullname }}</p>
       </div>
       <div class="form-group">
         <label>Age</label>
