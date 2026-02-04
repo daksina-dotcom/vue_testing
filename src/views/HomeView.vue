@@ -44,18 +44,12 @@ const reset =() => {
       <table v-if="toggler">
         <thead>
           <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Phone Number</th>
+            <th v-for="(,key) in users[0]" :key="key">{{ key }}</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="user in users" v-bind:key="user.id">
-            <td>{{ user.id }}</td>
-            <td>{{ user.name }}</td>
-            <td>{{ user.age }}</td>
-            <td>{{ user.phone }}</td>
+          <tr v-for="(user,index) in users">
+            <td v-for="(,key) in user">{{user[key]}}</td>
           </tr>
         </tbody>
       </table>

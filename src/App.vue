@@ -7,6 +7,7 @@ import { RouterView, RouterLink } from "vue-router";
     <nav>
       <RouterLink to="/"> Home </RouterLink>
       <RouterLink to="/form"> User Form</RouterLink>
+      <RouterLink to="/newform"> New Form</RouterLink>
     </nav>
   </header>
   <main>
