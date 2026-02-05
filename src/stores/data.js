@@ -2,21 +2,20 @@ import {ref,computed} from 'vue'
 import { defineStore } from 'pinia'
 export const createUser = defineStore('userData',()=>{
     const newData = ref([])
+    const search=ref("")
     function addUser(user){
         newData.value.push({...user,id: newData.value.length + 1});
     }
 
-    const filterUsers = computed(()=>{
-    if (search.value == ""){
-        return userStore.newData
+    const filteredUsers = computed(()=>{
+    if (search.value === ""){
+        return newData.value
     }
 
-    return userStore.newData.filter(user=>{
-        user.name.toLowerCase().includes(search)
+    return newData.value.filter(user=>{
+        return user.name.toLowerCase().includes(search.value.toLowerCase())
     })
 })
 
-
-
-    return {newData,addUser,filterUsers}
+    return {newData,search,addUser,filteredUsers}
 })

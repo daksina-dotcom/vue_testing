@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted, watch } from "vue";
-import userData from "/src/users.json";
-const users = ref(userData);
+import FormComponent from "@/components/formComponent.vue";
+
 const focusFirst = ref(null);
 const newData = ref([]);
 const fullname = computed(() => {
@@ -231,6 +231,7 @@ const resetting = () => {
       </tbody>
     </table>
   </div>
+  <!-- <FormComponent/> -->
 </template>
 
 <style scoped>

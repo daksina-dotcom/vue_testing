@@ -2,25 +2,26 @@
 import { ref, reactive, computed, onMounted, watch } from "vue";
 import { createUser } from "@/stores/data";
 import TableComponent from "@/components/tableComponent.vue";
-const userStore = createUser()
-const search = ref("")
+const userStore = createUser();
 
-const searchQuery = (query)=>{
-    search.value=query.toLowercase()
-}
+const searchQuery = (query) => {
+  userStore.search = query.toLowerCase();
+};
 
-const filteredUsers = computed(() => {
-  return userStore.filterUser(searchQuery.value);
+const filterUsers = computed(() => {
+  return userStore.filteredUsers;
 });
+
 const focusFirst = ref(null);
 const newData = ref([]);
 const fullname = computed(() => {
   return `${formData.firstname} ${formData.lastname}`;
 });
+
 const errors = reactive({
   firstname: "",
   lastname: "",
-    name: "",
+  name: "",
   age: "",
   phone: "",
   email: "",
@@ -47,19 +48,21 @@ const formData = reactive({
 
 const validate = () => {
   let isValid = true;
-  errors.firstname="";
-  errors.lastname="";
+  errors.firstname = "";
+  errors.lastname = "";
   errors.name = "";
   errors.age = "";
   errors.phone = "";
   errors.email = "";
   errors.password = "";
   if (formData.firstname.length < 2) {
-    errors.firstname = "Name must be more than 2 characters or atleast 2 characters";
+    errors.firstname =
+      "Name must be more than 2 characters or atleast 2 characters";
     isValid = false;
   }
   if (formData.lastname.length < 2) {
-    errors.lastname = "Name must be more than 2 characters or atleast 2 characters";
+    errors.lastname =
+      "Name must be more than 2 characters or atleast 2 characters";
     isValid = false;
   }
   if (formData.age === null || formData.age < 0) {
@@ -118,9 +121,25 @@ watch(
   },
 );
 
-onMounted(() => {
-  focusFirst.value.focus();
-});
+const vFocus = {
+  mounted:(input) => {
+    input.focus();
+  },
+};
+
+const vCase = {
+  mounted:(input)=>{
+    if(input.value){
+      input.value = input.value.charAt(0).toUpperCase() + input.value.slice(1).toLowerCase()
+    }
+    input.addEventListener('input',(val)=>{
+      if(val.target.value){
+        val.target.value = val.target.value.charAt(0).toUpperCase() + val.target.value.slice(1).toLowerCase()
+      }
+    })
+  }
+}
+
 // const jsonString = computed(() => {
 //   return JSON.stringify(newData.value, null, 2);
 // });
@@ -140,9 +159,8 @@ const resetting = () => {
   errors.phone = "";
   errors.email = "";
   errors.password = "";
-  errors.firstname="";
-  errors.lastname="";
-
+  errors.firstname = "";
+  errors.lastname = "";
 };
 </script>
 
@@ -153,22 +171,28 @@ const resetting = () => {
       <div class="form-group">
         <label>First Name</label>
         <input
-          ref="focusFirst"
+          v-case
+          v-focus
           v-model="formData.firstname"
           type="text"
           placeholder="Diwakar"
         />
-        <span class="error-text" v-if="errors.firstname">{{ errors.firstname }}</span>
+        <span class="error-text" v-if="errors.firstname">{{
+          errors.firstname
+        }}</span>
         <!-- <p>Current value: {{ formData.name }}</p> -->
       </div>
       <div class="form-group">
         <label>Last Name</label>
         <input
+          v-case
           v-model="formData.lastname"
           type="text"
           placeholder="Rajalingam"
         />
-        <span class="error-text" v-if="errors.lastname">{{ errors.lastname }}</span>
+        <span class="error-text" v-if="errors.lastname">{{
+          errors.lastname
+        }}</span>
         <!-- <p>Current value: {{ formData.name }}</p> -->
       </div>
       <div class="form-group">
@@ -230,10 +254,20 @@ const resetting = () => {
             <p>Live JSON Array Data</p>
             <textarea readonly :value="jsonString" rows="15"></textarea>
         </div> -->
-   <TableComponent :users="filteredUsers" 
-      @filter-user="searchQuery"/>
+    <TableComponent :users="filterUsers" @filter-users="searchQuery">
+      <template #prev-component-btn="{ doFunc, status }">
+        <FancyButton @click="doFunc" :disabled="status" class="green-btn">
+          Backward
+        </FancyButton>
+      </template>
+
+      <template #next-component-btn="{ doFunc, status }">
+        <FancyButton @click="doFunc" :disabled="status" class="orange-btn">
+          Forward
+        </FancyButton>
+      </template>
+    </TableComponent>
   </div>
-  
 </template>
 
 <style scoped>
@@ -247,6 +281,15 @@ button {
   cursor: pointer;
   text-align: center;
   padding: 20px 30px;
+}
+
+.orange-btn {
+  background-color: orange;
+  color: blue;
+}
+.green-btn {
+  background-color: greenyellow;
+  color: white;
 }
 
 .error-text {
